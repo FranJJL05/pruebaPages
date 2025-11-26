@@ -1,4 +1,4 @@
-name: Despliegue prueba S3
+name: Despliegue prueba Pages
 
 on:
   push:
@@ -39,17 +39,8 @@ jobs:
       - name: Generar Documentación JSDoc
         run: npm run docs
 
-      - name: Configurar Credenciales de AWS
-        uses: aws-actions/configure-aws-credentials@v4
+      - name: Desplegar Documentación a GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-          aws-region: us-east-1 
-          
-      - name: Despliegue de la Aplicación y Documentación a S3
-        run: |
-          BUCKET=${{ secrets.S3_BUCKET_NAME }}
-          # Usamos --sse AES256 para forzar cifrado estándar compatible con web pública
-          aws s3 sync ./src s3://$BUCKET/ --delete --sse AES256
-          aws s3 sync ./docs/ s3://$BUCKET/docs/ --delete --sse AES256
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs

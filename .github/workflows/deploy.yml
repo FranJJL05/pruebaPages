@@ -39,8 +39,21 @@ jobs:
       - name: Generar Documentación JSDoc
         run: npm run docs
 
-      - name: Desplegar Documentación a GitHub Pages
+      - name: Mover y Unificar Archivos de Despliegue
+        run: |
+          # 2a. Crea una carpeta temporal, 'page_root', para el despliegue final
+          mkdir page_root
+          
+          # 2b. Copia todos los archivos de tu carpeta 'src/' (index.html, styles, etc.) a la raíz de la página
+          # El -R copia recursivamente todo el contenido, manteniendo la estructura de carpetas
+          cp -R src/* page_root/
+          
+          # 2c. Mueve la carpeta de documentación JSDoc generada dentro de 'page_root'
+          # La documentación será accesible en URL/docs/
+          mv docs page_root/docs/
+          
+      - name: Desplegar a GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs
+          publish_dir: ./page_root

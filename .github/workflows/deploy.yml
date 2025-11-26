@@ -37,24 +37,22 @@ jobs:
         run: npm install
 
       - name: Generar Documentación JSDoc
+        # Esto crea la carpeta 'docs' en la raíz del repositorio
         run: npm run docs
 
       - name: Mover y Unificar Archivos de Despliegue
         run: |
-          # 2a. Crea una carpeta temporal, 'page_root', para el despliegue final
+          # 1. Crea la carpeta temporal de destino
           mkdir page_root
           
-          # 2b. Copia todos los archivos de tu carpeta 'src/' (index.html, styles, etc.) a la raíz de la página
-          # El -R copia recursivamente todo el contenido, manteniendo la estructura de carpetas
+          # 2. Copia todos los archivos de tu carpeta 'src/' a la raíz de la página
           cp -R src/* page_root/
           
-          # 2c. Mueve la carpeta de documentación JSDoc generada dentro de 'page_root'
-          # La documentación será accesible en URL/docs/
+          # 3. Mueve la carpeta de documentación JSDoc (solo una vez)
           mv docs page_root/docs/
 
+          # 4. Crea el archivo CNAME con tu dominio personalizado
           echo "pruebapages.frandaw.com" > page_root/CNAME 
-          
-          mv docs page_root/docs/
           
       - name: Desplegar a GitHub Pages
         uses: peaceiris/actions-gh-pages@v3

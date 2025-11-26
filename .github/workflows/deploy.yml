@@ -51,6 +51,10 @@ jobs:
           # 2c. Mueve la carpeta de documentación JSDoc generada dentro de 'page_root'
           # La documentación será accesible en URL/docs/
           mv docs page_root/docs/
+
+          echo "pruebapages.frandaw.com" > page_root/CNAME 
+          
+          mv docs page_root/docs/
           
       - name: Desplegar a GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
